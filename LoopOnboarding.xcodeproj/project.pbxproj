@@ -43,8 +43,7 @@
 		A9CE7D9725BC9BF400C04F9B /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7D9625BC9BF400C04F9B /* OSLog.swift */; };
 		A9CE7D9825BC9BF400C04F9B /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7D9625BC9BF400C04F9B /* OSLog.swift */; };
 		A9CE7D9925BC9BF400C04F9B /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7D9625BC9BF400C04F9B /* OSLog.swift */; };
-		A9CE7FDB25BCAB8300C04F9B /* LoopOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7FDA25BCAB8300C04F9B /* LoopOnboarding.swift */; };
-		A9CE7FE325BCABD500C04F9B /* LoopOnboarding+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7FE225BCABD500C04F9B /* LoopOnboarding+UI.swift */; };
+		A9CE7FE325BCABD500C04F9B /* LoopOnboardingUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7FE225BCABD500C04F9B /* LoopOnboardingUI.swift */; };
 		A9CE7FEB25BCABE800C04F9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9CE7FEA25BCABE800C04F9B /* Assets.xcassets */; };
 		A9CE7FF325BCAC1800C04F9B /* LoopOnboardingPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9CE7FF225BCAC1800C04F9B /* LoopOnboardingPlugin.swift */; };
 		A9CE802725BCAF9800C04F9B /* LoopOnboardingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A936A8B925BC99240085119C /* LoopOnboardingKit.framework */; };
@@ -115,8 +114,7 @@
 		A9B3CE8E25BCBE7D002D9E92 /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		A9CE7D7425BC9B2B00C04F9B /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		A9CE7D9625BC9BF400C04F9B /* OSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
-		A9CE7FDA25BCAB8300C04F9B /* LoopOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopOnboarding.swift; sourceTree = "<group>"; };
-		A9CE7FE225BCABD500C04F9B /* LoopOnboarding+UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoopOnboarding+UI.swift"; sourceTree = "<group>"; };
+		A9CE7FE225BCABD500C04F9B /* LoopOnboardingUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopOnboardingUI.swift; sourceTree = "<group>"; };
 		A9CE7FEA25BCABE800C04F9B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9CE7FF225BCAC1800C04F9B /* LoopOnboardingPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoopOnboardingPlugin.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -201,7 +199,6 @@
 			children = (
 				A936A8BB25BC99240085119C /* LoopOnboardingKit.h */,
 				A936A8BC25BC99240085119C /* Info.plist */,
-				A9CE7FDA25BCAB8300C04F9B /* LoopOnboarding.swift */,
 			);
 			path = LoopOnboardingKit;
 			sourceTree = "<group>";
@@ -219,7 +216,7 @@
 			children = (
 				A936A8D925BC99320085119C /* LoopOnboardingKitUI.h */,
 				A936A8DA25BC99320085119C /* Info.plist */,
-				A9CE7FE225BCABD500C04F9B /* LoopOnboarding+UI.swift */,
+				A9CE7FE225BCABD500C04F9B /* LoopOnboardingUI.swift */,
 				A9CE7FEA25BCABE800C04F9B /* Assets.xcassets */,
 				A9B3CE7F25BCBD75002D9E92 /* Extensions */,
 				A9B3CE3925BCBAA3002D9E92 /* View Controllers */,
@@ -620,7 +617,6 @@
 			files = (
 				A9CE7D9725BC9BF400C04F9B /* OSLog.swift in Sources */,
 				A9CE7D7525BC9B2B00C04F9B /* LocalizedString.swift in Sources */,
-				A9CE7FDB25BCAB8300C04F9B /* LoopOnboarding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -640,7 +636,7 @@
 				A9B3CE3B25BCBABB002D9E92 /* OnboardingUICoordinator.swift in Sources */,
 				A9B3CE6E25BCBBD7002D9E92 /* WelcomeView.swift in Sources */,
 				A9CE7D9825BC9BF400C04F9B /* OSLog.swift in Sources */,
-				A9CE7FE325BCABD500C04F9B /* LoopOnboarding+UI.swift in Sources */,
+				A9CE7FE325BCABD500C04F9B /* LoopOnboardingUI.swift in Sources */,
 				A9CE7D7625BC9B2B00C04F9B /* LocalizedString.swift in Sources */,
 				A9B3CE5625BCBB2B002D9E92 /* OnboardingChooserView.swift in Sources */,
 			);

@@ -15,7 +15,7 @@ class LoopOnboardingPlugin: NSObject, OnboardingUIPlugin {
     private let log = OSLog(category: "LoopOnboardingPlugin")
 
     public var onboardingType: OnboardingUI.Type? {
-        return LoopOnboarding.self
+        return LoopOnboardingUI.self
     }
 
     override init() {

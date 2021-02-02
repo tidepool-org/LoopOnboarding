@@ -256,7 +256,7 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
             let actionButton = TherapySettingsView.ActionButton(localizedString: nextButtonString) { [weak self] in
                 if let self = self {
                     if let therapySettings = self.therapySettingsViewModel?.therapySettings {
-                        self.onboardingDelegate?.onboardingNotifying(self, hasNewTherapySettings: therapySettings)
+                        self.onboardingDelegate?.onboardingNotifying(hasNewTherapySettings: therapySettings)
                     }
                     self.stepFinished()
                 }
@@ -303,15 +303,18 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
             switch serviceProvider.setupService(withIdentifier: OnboardingUICoordinator.serviceIdentifier) {
             case .failure(let error):
                 log.debug("Failure to create and setup service with identifier '%{public}@': %{public}@", OnboardingUICoordinator.serviceIdentifier, String(describing: error))
-            case .userInteractionRequired(var setupViewController):
-                setupViewController.serviceCreateDelegate = self
-                setupViewController.serviceOnboardDelegate = self
-                setupViewController.completionDelegate = self
-                show(setupViewController, sender: self)
-            case .success(let service):
-                serviceCreateNotifying(self, didCreateService: service)
-                serviceOnboardNotifying(self, didOnboardService: service)
-                stepFinished()
+            case .success(let success):
+                switch success {
+                case .userInteractionRequired(var setupViewController):
+                    setupViewController.serviceCreateDelegate = self
+                    setupViewController.serviceOnboardDelegate = self
+                    setupViewController.completionDelegate = self
+                    show(setupViewController, sender: self)
+                case .createdAndOnboarded(let service):
+                    serviceCreateNotifying(didCreateService: service)
+                    serviceOnboardNotifying(didOnboardService: service)
+                    stepFinished()
+                }
             }
         }
     }
@@ -366,39 +369,39 @@ extension OnboardingUICoordinator: UINavigationControllerDelegate {
 }
 
 extension OnboardingUICoordinator: CGMManagerCreateDelegate {
-    func cgmManagerCreateNotifying(_ notifying: CGMManagerCreateNotifying, didCreateCGMManager cgmManager: CGMManagerUI) {
-        cgmManagerCreateDelegate?.cgmManagerCreateNotifying(notifying, didCreateCGMManager: cgmManager)
+    func cgmManagerCreateNotifying(didCreateCGMManager cgmManager: CGMManagerUI) {
+        cgmManagerCreateDelegate?.cgmManagerCreateNotifying(didCreateCGMManager: cgmManager)
     }
 }
 
 extension OnboardingUICoordinator: CGMManagerOnboardDelegate {
-    func cgmManagerOnboardNotifying(_ notifying: CGMManagerOnboardNotifying, didOnboardCGMManager cgmManager: CGMManagerUI) {
-        cgmManagerOnboardDelegate?.cgmManagerOnboardNotifying(notifying, didOnboardCGMManager: cgmManager)
+    func cgmManagerOnboardNotifying(didOnboardCGMManager cgmManager: CGMManagerUI) {
+        cgmManagerOnboardDelegate?.cgmManagerOnboardNotifying(didOnboardCGMManager: cgmManager)
     }
 }
 
 extension OnboardingUICoordinator: PumpManagerCreateDelegate {
-    func pumpManagerCreateNotifying(_ notifying: PumpManagerCreateNotifying, didCreatePumpManager pumpManager: PumpManagerUI) {
-        pumpManagerCreateDelegate?.pumpManagerCreateNotifying(notifying, didCreatePumpManager: pumpManager)
+    func pumpManagerCreateNotifying(didCreatePumpManager pumpManager: PumpManagerUI) {
+        pumpManagerCreateDelegate?.pumpManagerCreateNotifying(didCreatePumpManager: pumpManager)
     }
 }
 
 extension OnboardingUICoordinator: PumpManagerOnboardDelegate {
-    func pumpManagerOnboardNotifying(_ notifying: PumpManagerOnboardNotifying, didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSettings) {
-        pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(notifying, didOnboardPumpManager: pumpManager, withFinalSettings: settings)
+    func pumpManagerOnboardNotifying(didOnboardPumpManager pumpManager: PumpManagerUI, withFinalSettings settings: PumpManagerSetupSettings) {
+        pumpManagerOnboardDelegate?.pumpManagerOnboardNotifying(didOnboardPumpManager: pumpManager, withFinalSettings: settings)
     }
 }
 
 extension OnboardingUICoordinator: ServiceCreateDelegate {
-    func serviceCreateNotifying(_ notifying: ServiceCreateNotifying, didCreateService service: Service) {
+    func serviceCreateNotifying(didCreateService service: Service) {
         self.service = service
-        serviceCreateDelegate?.serviceCreateNotifying(notifying, didCreateService: service)
+        serviceCreateDelegate?.serviceCreateNotifying(didCreateService: service)
     }
 }
 
 extension OnboardingUICoordinator: ServiceOnboardDelegate {
-    func serviceOnboardNotifying(_ notifying: ServiceOnboardNotifying, didOnboardService service: Service) {
-        serviceOnboardDelegate?.serviceOnboardNotifying(notifying, didOnboardService: service)
+    func serviceOnboardNotifying(didOnboardService service: Service) {
+        serviceOnboardDelegate?.serviceOnboardNotifying(didOnboardService: service)
     }
 }
 
