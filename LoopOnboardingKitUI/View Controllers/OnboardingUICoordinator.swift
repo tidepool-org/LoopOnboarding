@@ -326,8 +326,6 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
     }
 
     private func setupWithoutNightscout() {
-        service?.delete()
-        service = nil
         stepFinished()
     }
 
