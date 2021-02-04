@@ -66,7 +66,6 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
     private var currentScreen: OnboardingScreen { return screenStack.last! }
 
     private var service: Service?
-    private let preexistingService: Bool
 
     private var therapySettingsViewModel: TherapySettingsViewModel? // Used for keeping track of & updating settings
 
@@ -82,7 +81,6 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
         self.serviceProvider = serviceProvider
         self.colorPalette = colorPalette
         self.service = serviceProvider.activeServices.first(where: { $0.serviceIdentifier == OnboardingUICoordinator.serviceIdentifier })
-        self.preexistingService = service?.isOnboarded == true
 
         super.init(navigationBarClass: UINavigationBar.self, toolbarClass: UIToolbar.self)
     }
@@ -116,7 +114,7 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
             let hostedView = hostingController(rootView: view)
             return hostedView
         case .nightscoutChooser:
-            if preexistingService {
+            if service?.isOnboarded == true {
                 return viewControllerForScreen(.suspendThresholdInfo)
             }
             let view = OnboardingChooserView(setupWithNightscout: setupWithNightscout, setupWithoutNightscout: setupWithoutNightscout)
@@ -282,9 +280,17 @@ class OnboardingUICoordinator: UINavigationController, OnboardingNotifying, CGMM
     }
 
     private func navigate(to screen: OnboardingScreen) {
+        var viewControllers = self.viewControllers
+
+        // Remove the Nightscout chooser from the view controller hierarchy if the Nightscout service is fully onboarded
+        if currentScreen == .nightscoutChooser && service?.isOnboarded == true {
+            screenStack.removeLast()
+            viewControllers.removeLast()
+        }
+
         screenStack.append(screen)
-        let viewController = viewControllerForScreen(screen)
-        pushViewController(viewController, animated: true)
+        viewControllers.append(viewControllerForScreen(screen))
+        setViewControllers(viewControllers, animated: true)
     }
 
     private func setupWithNightscout() {
@@ -363,7 +369,7 @@ extension OnboardingUICoordinator: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         // Pop the current screen from the stack if we're navigating back
         while viewControllers.count < screenStack.count {
-            _ = screenStack.popLast()
+            screenStack.removeLast()
         }
     }
 }
