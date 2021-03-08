@@ -269,6 +269,9 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
         var nextScreen: OnboardingScreen?
 
         nextScreen = currentScreen.next()
+
+        // If the next screen is the Nightscout service chooser, but the Nightscout service
+        // is already created and onboarded, then simply skip to the next screen
         if nextScreen == .nightscoutChooser && service?.isOnboarded == true {
             nextScreen = nextScreen?.next()
         }
