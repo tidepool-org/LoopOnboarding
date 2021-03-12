@@ -58,7 +58,7 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
     private let onboarding: LoopOnboardingUI
     private let onboardingProvider: OnboardingProvider
     private let initialTherapySettings: TherapySettings
-    private var preferredGlucoseUnit: HKUnit
+    private let displayGlucoseUnitObservable: DisplayGlucoseUnitObservable
     private let colorPalette: LoopUIColorPalette
 
     private var screenStack = [OnboardingScreen]()
@@ -72,11 +72,11 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
 
     private static let serviceIdentifier = "NightscoutService"
 
-    init(onboarding: LoopOnboardingUI, onboardingProvider: OnboardingProvider, initialTherapySettings: TherapySettings, preferredGlucoseUnit: HKUnit, colorPalette: LoopUIColorPalette) {
+    init(onboarding: LoopOnboardingUI, onboardingProvider: OnboardingProvider, initialTherapySettings: TherapySettings, displayGlucoseUnitObservable: DisplayGlucoseUnitObservable, colorPalette: LoopUIColorPalette) {
         self.onboarding = onboarding
         self.onboardingProvider = onboardingProvider
         self.initialTherapySettings = initialTherapySettings
-        self.preferredGlucoseUnit = preferredGlucoseUnit
+        self.displayGlucoseUnitObservable = displayGlucoseUnitObservable
         self.colorPalette = colorPalette
         self.service = onboardingProvider.activeServices.first(where: { $0.serviceIdentifier == OnboardingUICoordinator.serviceIdentifier })
 
@@ -126,7 +126,7 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
             hostedView.title = TherapySetting.suspendThreshold.title
             return hostedView
         case .suspendThresholdEditor:
-            let view = SuspendThresholdEditor(viewModel: therapySettingsViewModel!)
+            let view = SuspendThresholdEditor(therapySettingsViewModel: therapySettingsViewModel!)
             let hostedView = hostingController(rootView: view)
             hostedView.navigationItem.largeTitleDisplayMode = .never // TODO: hack to fix jumping, will be removed once editors have titles
             return hostedView
@@ -262,7 +262,7 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
     }
 
     private func hostingController<Content: View>(rootView: Content) -> DismissibleHostingController {
-        return DismissibleHostingController(rootView: rootView, colorPalette: colorPalette)
+        return DismissibleHostingController(rootView: rootView.environmentObject(displayGlucoseUnitObservable), colorPalette: colorPalette)
     }
 
     private func stepFinished() {
@@ -350,7 +350,6 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
         return TherapySettingsViewModel(
             mode: .acceptanceFlow,
             therapySettings: therapySettings,
-            preferredGlucoseUnit: preferredGlucoseUnit,
             supportedInsulinModelSettings: supportedInsulinModelSettings,
             pumpSupportedIncrements: { pumpSupportedIncrements },
             syncPumpSchedule: {
@@ -364,11 +363,6 @@ class OnboardingUICoordinator: UINavigationController, OnboardingViewController 
         ) { [weak self] _, _ in
             self?.stepFinished()
         }
-    }
-
-    // MARK: - PreferredGlucoseUnitObserver
-    func preferredGlucoseUnitDidChange(to preferredGlucoseUnit: HKUnit) {
-        self.preferredGlucoseUnit = preferredGlucoseUnit
     }
 }
 
