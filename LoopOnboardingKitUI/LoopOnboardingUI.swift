@@ -28,6 +28,8 @@ public final class LoopOnboardingUI: OnboardingUI {
         }
     }
 
+    public let isSuspended: Bool = false
+
     var therapySettings: TherapySettings? {
         didSet {
             guard therapySettings != oldValue, let therapySettings = therapySettings else { return }
