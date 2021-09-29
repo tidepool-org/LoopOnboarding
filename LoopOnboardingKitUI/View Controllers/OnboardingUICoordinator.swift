@@ -259,10 +259,16 @@ class OnboardingUICoordinator: UINavigationController, CGMManagerOnboarding, Pum
             therapySettings: therapySettings,
             supportedInsulinModelSettings: supportedInsulinModelSettings,
             pumpSupportedIncrements: { pumpSupportedIncrements },
-            syncPumpSchedule: {
+            syncBasalRateSchedule: {
                 { _, _ in
                     // Since pump isn't set up, this syncing shouldn't do anything
                     assertionFailure()
+                }
+            },
+            validateTempBasal: {
+                { _, completion in
+                    // Just call the completion block
+                    completion(nil)
                 }
             },
             prescription: nil
