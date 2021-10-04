@@ -265,7 +265,7 @@ class OnboardingUICoordinator: UINavigationController, CGMManagerOnboarding, Pum
                     assertionFailure()
                 }
             },
-            validateMaxTempBasal: {
+            maxTempBasalSavePreflight: {
                 { _, completion in
                     // Just call the completion block
                     completion(nil)
