@@ -257,11 +257,13 @@ class OnboardingUICoordinator: UINavigationController, CGMManagerOnboarding, Pum
         return TherapySettingsViewModel(
             therapySettings: therapySettings,
             pumpSupportedIncrements: { pumpSupportedIncrements },
-            syncPumpSchedule: {
-                { _, _ in
-                    // Since pump isn't set up, this syncing shouldn't do anything
-                    assertionFailure()
-                }
+            syncBasalRateSchedule: { _, _ in
+                // Since pump isn't set up, this syncing shouldn't do anything
+                assertionFailure()
+            },
+            maxTempBasalSavePreflight: { _, completion in
+                // Just call the completion block
+                completion(nil)
             },
             prescription: nil
         ) { [weak self] _, _ in
