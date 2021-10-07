@@ -242,35 +242,38 @@ class OnboardingUICoordinator: UINavigationController, CGMManagerOnboarding, Pum
     }
 
     private func constructTherapySettingsViewModel(therapySettings: TherapySettings) -> TherapySettingsViewModel? {
+        return TherapySettingsViewModel(therapySettings: therapySettings, delegate: self)
+    }
+}
+
+extension OnboardingUICoordinator: TherapySettingsViewModelDelegate {
+    func syncBasalRateSchedule(items: [RepeatingScheduleValue<Double>], completion: @escaping (Result<BasalRateSchedule, Error>) -> Void) {
+        // noop
+    }
+    
+    func syncDeliveryLimits(deliveryLimits: DeliveryLimits, completion: @escaping (Result<DeliveryLimits, Error>) -> Void) {
+        // noop
+    }
+    
+    func saveCompletion(for therapySetting: TherapySetting, therapySettings: TherapySettings) {
+        stepFinished()
+    }
+    
+    func pumpSupportedIncrements() -> PumpSupportedIncrements? {
         let supportedBasalRates = (1...600).map { round(Double($0) / Double(1.0/0.05) * 100.0) / 100.0 }
 
         let maximumBasalScheduleEntryCount = 24
 
         let supportedBolusVolumes = (1...600).map { Double($0) / Double(1/0.05) }
-
-        let pumpSupportedIncrements = PumpSupportedIncrements(
+        
+        return PumpSupportedIncrements(
             basalRates: supportedBasalRates,
             bolusVolumes: supportedBolusVolumes,
             maximumBasalScheduleEntryCount: maximumBasalScheduleEntryCount
         )
-
-        return TherapySettingsViewModel(
-            therapySettings: therapySettings,
-            pumpSupportedIncrements: { pumpSupportedIncrements },
-            syncBasalRateSchedule: { _, _ in
-                // Since pump isn't set up, this syncing shouldn't do anything
-                assertionFailure()
-            },
-            maxTempBasalSavePreflight: { _, completion in
-                // Just call the completion block
-                completion(nil)
-            },
-            prescription: nil
-        ) { [weak self] _, _ in
-            self?.stepFinished()
-        }
     }
 }
+
 
 extension OnboardingUICoordinator: UINavigationControllerDelegate {
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
